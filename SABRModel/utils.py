@@ -74,26 +74,27 @@ def BS_strike(log_S0, log_strk, r, sigma, maturity, call):
   print('Tracing')
 
   return tf.cond(call>0, lambda: -0.5*tf.exp(log_strk-r*maturity)*tf.math.erfc( (2*log_strk-2*log_S0-maturity*(2*r-tf.pow(sigma,2)))/(2*tf.math.sqrt(2*maturity)*sigma) ), 
-                 lambda: 0.5*tf.exp(log_strk-r*maturity)*tf.math.erfc( (-2*log_strk+2*log_S0+maturity*(2*r-tf.pow(sigma,2)))/(2*tf.math.sqrt(2*maturity)*sigma) ) )
+                         lambda: 0.5*tf.exp(log_strk-r*maturity)*tf.math.erfc( (-2*log_strk+2*log_S0+maturity*(2*r-tf.pow(sigma,2)))/(2*tf.math.sqrt(2*maturity)*sigma) ) )
+
 
 def iv_retr(S0, opt_prices, strk, r, maturity, flag='c'):
-    """ Calculates Black-Scholes Implied Volatility.
-
-    Args:
-      S0 - current price of a stock
-      opt_prices -array of option prices corresponding to given strikes and maturity/ies
-      strk - list of strikes ([K1,K2,....Kn])
-      maturity - list of values or scalar value
-      flag - str, either 'c' for call option or 'p' for put option.
-  
-    Returns:
-        float32 np.array  
+  """ Calculates Black-Scholes Implied Volatility.
+    
+   Args:
+    S0 - current price of a stock
+    opt_prices -array of option prices corresponding to given strikes and maturity/ies
+    strk - list of strikes ([K1,K2,....Kn])
+    maturity - list of values or scalar value
+    flag - str, either 'c' for call option or 'p' for put option.
+      
+   Returns:
+    float32 np.array  
     """
-
-    res = []
-
-    for i in range(len(strk)): # Loop over strikes, can be optimised. But for now this part is not that crucial.
-
-        res.append( implied_volatility(price=opt_prices[i], S=S0, K=strk[i], t=maturity, r=r, flag=flag) )
-
-    return np.array(res)
+    
+  res = []
+    
+  for i in range(len(strk)): # Loop over strikes, can be optimised. But for now this part is not that crucial.
+    
+      res.append( implied_volatility(price=opt_prices[i], S=S0, K=strk[i], t=maturity, r=r, flag=flag) )
+    
+  return np.array(res)
